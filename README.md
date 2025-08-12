@@ -2,7 +2,7 @@
 Simple personal server for collecting URLs you want to process later.
 
 ## Demo
-https://github.com/user-attachments/assets/9e36980c-78ec-48a7-a812-a457ae078216
+https://github.com/Ben-FCC/ParkMyLink/raw/main/public/demo/Pending_URLs_Demo.mov
 
 ## Features
 - Receive URLs via HTTP and store them in a last-in-first-out queue.
@@ -41,7 +41,7 @@ Create a Shortcut that sends a **POST** request to your ngrok URL:
    - Request Body: JSON
    - Text: url = (Shortcut Input)
 ```
-<img width="500" height="1000" alt="IMG_7137" src="https://github.com/user-attachments/assets/0d47d301-d931-4462-b5bb-a4d644ddcff9" />
+<img width="500" height="1000" alt="IMG_7137" src="https://github.com/Ben-FCC/ParkMyLink/raw/main/public/demo/E072818D-610A-410C-AD33-DD24351AC814_1_105_c.jpeg" />
 
 Now you can share a link from Safari or any app to this Shortcut and it will appear in the web UI.
 
