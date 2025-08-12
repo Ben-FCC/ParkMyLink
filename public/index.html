@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pending URLs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white min-h-full">
+  <div class="container mx-auto p-4">
+    <h1 class="text-2xl mb-4">Pending URLs</h1>
+    <div id="list" class="flex flex-col gap-4"></div>
+  </div>
+<script>
+let isLoading = false;
+
+async function fetchUrls() {
+  if (isLoading) return; // Prevent duplicate requests
+  
+  isLoading = true;
+  
+  try {
+    const res = await fetch('/api/urls');
+    const data = await res.json();
+    const list = document.getElementById('list');
+    list.innerHTML = '';
+    
+    for (const item of data) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'bg-gray-800 p-4 rounded flex flex-col md:flex-row gap-4';
+
+      // fetch preview data from microlink
+      let preview;
+      try {
+        const resp = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(item.url)}&screenshot=true`);
+        const json = await resp.json();
+        preview = json.data;
+      } catch (e) {
+        preview = null;
+      }
+
+      if (preview && (preview.screenshot?.url || preview.image?.url)) {
+        const img = document.createElement('img');
+        img.src = preview.screenshot?.url || preview.image?.url;
+        img.className = 'w-full md:w-1/3 object-cover rounded';
+        wrapper.appendChild(img);
+      }
+
+      const content = document.createElement('div');
+      content.className = 'flex-1';
+
+      const link = document.createElement('a');
+      link.href = item.url;
+      link.textContent = preview?.title || item.url;
+      link.className = 'text-blue-400 font-semibold break-all';
+      link.target = '_blank';
+      content.appendChild(link);
+
+      if (preview?.description) {
+        const desc = document.createElement('p');
+        desc.textContent = preview.description;
+        desc.className = 'text-sm text-gray-400 mt-1';
+        content.appendChild(desc);
+      }
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Finished';
+      btn.className = 'mt-2 bg-green-600 hover:bg-green-500 text-white px-2 py-1 rounded';
+      btn.onclick = async () => {
+        await fetch('/api/urls/' + item.id, { method: 'DELETE' });
+        fetchUrls(); // Refresh data after deletion
+      };
+      content.appendChild(btn);
+
+      wrapper.appendChild(content);
+      list.appendChild(wrapper);
+    }
+  } catch (error) {
+    console.error('Error fetching URLs:', error);
+    const list = document.getElementById('list');
+    list.innerHTML = '<div class="text-red-400 text-center p-4">Error loading data. Please try again.</div>';
+  } finally {
+    isLoading = false;
+  }
+}
+
+// Refresh data when page visibility changes
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    console.log('Page became visible, refreshing data...');
+    fetchUrls();
+  }
+});
+
+// Refresh data when window gains focus
+window.addEventListener('focus', () => {
+  console.log('Window gained focus, refreshing data...');
+  fetchUrls();
+});
+
+// Load data when page loads
+fetchUrls();
+</script>
+</body>
+</html>

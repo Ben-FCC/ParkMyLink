@@ -1,0 +1,17 @@
+{
+  "name": "pending-organized-server",
+  "version": "1.0.0",
+  "description": "Simple server for collecting URLs pending organization.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"no tests\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
