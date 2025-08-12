@@ -2,7 +2,7 @@
 Simple personal server for collecting URLs you want to process later.
 
 ## Demo
-https://github.com/Ben-FCC/ParkMyLink/blob/main/public/demo/Pending_URLs_Demo.mov
+[![Demo Video](https://img.youtube.com/vi/L9Epl3Z8Bv8/0.jpg)](https://youtu.be/L9Epl3Z8Bv8)
 
 ## Features
 - Receive URLs via HTTP and store them in a last-in-first-out queue.
